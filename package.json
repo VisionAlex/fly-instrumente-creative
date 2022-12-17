@@ -2,27 +2,47 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "build": "remix build",
+    "build": "run-s build:css build:remix",
+    "build:remix": "remix build",
+    "build:css": "postcss styles/global.css -o app/styles/global.css",
     "deploy": "fly deploy --remote-only",
-    "dev": "remix dev",
+    "dev": "npm run build:css && run-p dev:*",
+    "dev:remix": "dotenv -- remix dev",
+    "dev:css": "postcss styles/global.css -o app/styles/global.css --watch",
     "start": "remix-serve build",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "clean": "rimraf ./public/build ./build ./.cache/content-v2 ./.cache/index-v5"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.7",
+    "@heroicons/react": "^2.0.13",
     "@remix-run/node": "^1.9.0",
     "@remix-run/react": "^1.9.0",
     "@remix-run/serve": "^1.9.0",
+    "classnames": "^2.3.2",
     "isbot": "^3.6.5",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "redis": "^4.5.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.9.0",
     "@remix-run/eslint-config": "^1.9.0",
+    "@tailwindcss/typography": "^0.5.8",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
+    "autoprefixer": "^10.4.13",
+    "concurrently": "^7.6.0",
+    "cssnano": "^5.1.14",
+    "dotenv-cli": "^6.0.0",
     "eslint": "^8.27.0",
-    "typescript": "^4.8.4"
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.20",
+    "postcss-cli": "^10.1.0",
+    "postcss-load-config": "^4.0.1",
+    "rimraf": "^3.0.2",
+    "tailwindcss": "^3.2.4",
+    "typescript": "^4.9.4"
   },
   "engines": {
     "node": ">=16"
